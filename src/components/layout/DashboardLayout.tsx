@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Header from './Header';
-import Sidebar from './Sidebar';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -15,7 +14,6 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout({ children, user, onLogout }: DashboardLayoutProps) {
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleThemeToggle = () => {
@@ -26,10 +24,6 @@ export default function DashboardLayout({ children, user, onLogout }: DashboardL
     } else {
       document.documentElement.classList.remove('dark');
     }
-  };
-
-  const handleSidebarToggle = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
   return (
@@ -44,16 +38,8 @@ export default function DashboardLayout({ children, user, onLogout }: DashboardL
 
       {/* Main Content */}
       <div className="flex h-screen pt-16">
-        {/* Sidebar */}
-        <Sidebar
-          isCollapsed={isSidebarCollapsed}
-          onToggle={handleSidebarToggle}
-        />
-
         {/* Content Area */}
-        <main className={`flex-1 overflow-auto transition-all duration-300 ${
-          isSidebarCollapsed ? 'ml-16' : 'ml-64'
-        }`}>
+        <main className="flex-1 overflow-auto">
           <div className="p-6">
             {children}
           </div>

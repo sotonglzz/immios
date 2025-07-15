@@ -4,6 +4,47 @@ This document tracks all version changes and work completed in the IMMIOS projec
 
 ## Version History
 
+### v0.1.1 - 2025-01-11T14:30:00.000Z
+
+**Action**: Documentation enhancement
+**Branch**: main
+**Commit Hash**: Documentation update
+**Commit Message**: Added comprehensive sitemap and wireframes documentation
+**Commit Date**: 2025-01-11
+
+**Files Changed**: 3 files
+- Documentation/Sitemap and Wireframes - Instant Marquees Melbourne Internal Operations Software (IMMIOS).txt
+- TASK.md
+- HISTORY.md
+
+**Change Categories**:
+- **Documentation**: Sitemap and Wireframes document
+- **Task Tracking**: TASK.md updated with completed documentation task
+- **Version History**: HISTORY.md updated with new version entry
+
+**Tasks Completed**:
+- [x] Sitemap and Wireframes Documentation
+  - [x] Created comprehensive sitemap with hierarchical structure
+  - [x] Designed wireframes for key screens (Dashboard, Calendar, Job Details)
+  - [x] Documented navigation flow and user interface layout
+  - [x] Added detailed wireframe specifications for form interactions
+- [x] Dashboard Implementation
+  - [x] Created dashboard page following wireframe specifications
+  - [x] Implemented Quick Overview section with upcoming jobs and assembly alerts
+  - [x] Added Action Center with "Add New Quote/Job" button and Mode Views dropdown
+  - [x] Created Stock Summary and Recent Activity sections
+  - [x] Updated main page to redirect to dashboard
+  - [x] Integrated with existing DashboardLayout component
+
+**Work Summary**:
+- Version 0.1.1 created for documentation enhancement and dashboard implementation
+- 5 files modified
+- Comprehensive sitemap and wireframes documentation added
+- Dashboard page implemented according to wireframe specifications
+- Task tracking updated to reflect completed work
+
+---
+
 ### v0.1.0 - 2025-01-11T13:17:00.000Z
 
 **Action**: Initial setup

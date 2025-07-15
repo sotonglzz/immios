@@ -84,7 +84,8 @@ IMMIOS/
 - **PLANNING.md**: High-level vision, architecture, constraints, tech stack
 - **TASK.md**: Current tasks, backlog, milestones, progress tracking
 - **HISTORY.md**: Complete version history with detailed work information
-- **Documentation/**: Original PDF documentation files
+- **Documentation/**: Original PDF documentation files and design specifications
+  - **Sitemap and Wireframes**: Comprehensive UI/UX design documentation with navigation structure and wireframe layouts
 
 ## Development Phases
 

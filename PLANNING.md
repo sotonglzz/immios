@@ -114,6 +114,8 @@ User Browser (Real-time Updates)
 - **Authorization**: Role-based access control (Admin/Staff)
 - **Data validation**: Server-side validation for all inputs
 - **Firestore security rules**: Proper read/write permissions
+- **Development Security**: Currently using test mode (`allow read, write: if true`) for development
+- **Production Security**: Must implement proper authentication-based rules before production deployment
 
 ### Scalability Considerations
 - **Serverless architecture**: Automatic scaling with Vercel
@@ -135,6 +137,11 @@ src/
 ├── styles/             # Global styles and Tailwind config
 └── firebase/           # Firebase configuration and helpers
 ```
+
+### UI/UX Design Reference
+- **Sitemap and Wireframes**: See `Documentation/Sitemap and Wireframes - Instant Marquees Melbourne Internal Operations Software (IMMIOS).txt` for detailed navigation structure and wireframe layouts
+- **Design System**: Follow wireframe specifications for consistent UI implementation
+- **Navigation Flow**: Implement according to sitemap hierarchy for intuitive user experience
 
 ### Coding Standards
 - **TypeScript**: Strict mode enabled

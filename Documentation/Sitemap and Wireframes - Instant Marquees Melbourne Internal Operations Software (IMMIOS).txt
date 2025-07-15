@@ -1,0 +1,238 @@
+Sitemap and Wireframes: Instant Marquees Melbourne Internal Operations Software (IMMIOS)
+
+Project Name: Instant Marquees Melbourne Internal Operations Software (IMMIOS)
+Version: 1.2
+Date: July 11, 2025
+
+1. Introduction
+
+This document provides the sitemap and key wireframes for the Instant Marquees Melbourne Internal Operations Software (IMMIOS). The sitemap defines the overall information architecture and navigation flow, while the wireframes illustrate the layout and functionality of critical screens. These visual aids are crucial for ensuring a shared understanding of the user interface before moving into detailed visual design and development.
+
+2. Sitemap
+
+The sitemap below outlines the hierarchical structure of the IMMIOS, showing all major pages and their relationships. This structure is designed for intuitive navigation for your internal team.
+
+1. Login / Logout
+    - Login Page
+    - Logout Functionality
+
+2. Dashboard / Home
+    - Quick overview (e.g., upcoming jobs, pending alerts)
+    - Navigation to main modules
+
+3. Schedule (Primary Module - Calendar View)
+    - Calendar View (Default: Operations)
+        - Day View
+        - Week View
+        - Month View
+    - Job Details / Quote Form (accessed from Calendar)
+        - Client Information
+        - Dates (Install, Event, Removal)
+        - Location
+        - Notes
+        - Product Selection (with stock check)
+        - Staff Assignment (initial)
+        - Vehicle Assignment (initial)
+    - Job List (Alternative view to Calendar, e.g., for searching/filtering)
+
+4. Stock Management
+    - Products Overview
+        - Individual Product Details (Name, Current Stock, BOM)
+        - Add/Edit Product
+    - Components Overview
+        - Individual Component Details (Name, Type, Size, Color, Condition, Current Stock)
+        - Add/Edit Component
+    - Stock Adjustment / Audit
+    - Assembly Alerts / Tasks (for Warehouse Manager)
+
+5. Admin Settings (Accessible only by Admin Role)
+    - General Settings
+        - Site Color Choices (Primary, Accent)
+        - Default Light/Dark Mode
+    - Staff & User Management
+        - Staff Profiles List (now includes associated user account status)
+        - Create/Edit Staff Profile (now includes creating/linking/managing user accounts)
+        - Staff Availability Input
+    - Vehicle Management
+        - Vehicle Profiles List
+        - Individual Vehicle Profile Details (Display Name, Type, Capacity, Rego, Servicing)
+        - Add/Edit Vehicle Profile
+    - (Future: BOM Management - could be here or under Stock Management)
+
+6. Mode Views (Dropdown Selector within Schedule/Calendar View)
+    - Operations (Default View)
+    - Rostering
+    - LoadList
+    - Financial Status
+
+3. Wireframes
+
+Wireframes provide a low-fidelity visual representation of the layout and key elements on specific screens. They focus on functionality and information hierarchy, not aesthetics.
+
+3.1. Wireframe: Homepage / Dashboard
+
+This is the first screen users will see after logging in, providing a quick overview and access to core functions.
+
++--------------------------------------------------------------------------------+
+| [IMMIOS Logo]                                            [User Name] [Logout] |
++--------------------------------------------------------------------------------+
+| [Dashboard] [Schedule] [Stock Mgmt] [Admin Settings]                           |
++--------------------------------------------------------------------------------+
+|                                                                                |
+|  Welcome, [User Name]!                                                         |
+|                                                                                |
++--------------------------------------------------------------------------------+
+|                                                                                |
+|  +-------------------------------------+ +-----------------------------------+ |
+|  | **Quick Overview**                  | | **Action Center**                 | |
+|  |-------------------------------------| |-----------------------------------| |
+|  |                                     | |                                   | |
+|  | **Upcoming Jobs (Next 7 Days):**    | | [Large Button: + Add New Quote/Job] |
+|  | - [Job Title A] (Install: MM/DD)    | |                                   | |
+|  | - [Job Title B] (Removal: MM/DD)    | |                                   | |
+|  | - [Job Title C] (Event: MM/DD)      | |                                   | |
+|  | [View All Jobs in Calendar]         | |                                   | |
+|  |                                     | |                                   | |
+|  | **Pending Assembly Alerts:**        | |                                   | |
+|  | - [Product 1] (Qty: X)              | |  [Dropdown Selector]              | |
+|  | - [Product 2] (Qty: Y)              | |  +-----------------------------+  |
+|  | [View All Assembly Tasks]           | |  | Mode Views              [v]|  |
+|  |                                     | |  +-----------------------------+  |
+|  |                                     | |  | Operations                  |  |
+|  |                                     | |  | Rostering         (Alert: X)|  |
+|  |                                     | |  | LoadList          (Alert: Y)|  |
+|  |                                     | |  | Financial Status  (Alert: Z)|  |
+|  |                                     | |  +-----------------------------+  |
+|  +-------------------------------------+ +-----------------------------------+ |
+|                                                                                |
+|  +-------------------------------------+ +-----------------------------------+ |
+|  | **Stock Summary**                   | | **Recent Activity / Notifications** |
+|  |-------------------------------------| |-----------------------------------| |
+|  |                                     | |                                   | |
+|  | Pop-up Marquees: [X] available      | | - [User A] updated [Job 123]      |
+|  | Structure Marquees: [Y] available   | | - [User B] created [Quote 456]    |
+|  | Furniture Items: [Z] available      | | - [Warehouse] completed assembly  |
+|  | [View Full Stock]                   | | [View All Notifications]          |
+|  |                                     | |                                   | |
+|  +-------------------------------------+ +-----------------------------------+ |
+|                                                                                |
++--------------------------------------------------------------------------------+
+
+3.2. Wireframe: Schedule (Calendar View)
+
+This is the central hub for job management, featuring the calendar and the mode selector.
+
++--------------------------------------------------------------------------------+
+| [IMMIOS Logo]                                            [User Name] [Logout] |
++--------------------------------------------------------------------------------+
+| [Dashboard] [Schedule] [Stock Mgmt] [Admin Settings]                           |
++--------------------------------------------------------------------------------+
+|                                                                                |
+|  <-- [Previous Month] [Current Month Name, Year] [Next Month] -->             |
+|                                                                                |
+|  [Day] [Week] [Month] Views                                                    |
+|                                                                                |
+|  [Dropdown Selector]                                                           |
+|  +-----------------------------+                                               |
+|  | Mode Views              [v]|                                               |
+|  +-----------------------------+                                               |
+|  | Operations                  |                                               |
+|  | Rostering         (Alert: X)|                                               |
+|  | LoadList          (Alert: Y)|                                               |
+|  | Financial Status  (Alert: Z)|                                               |
+|  +-----------------------------+                                               |
+|                                                                                |
++--------------------------------------------------------------------------------+
+|                                  CALENDAR GRID                                 |
+|--------------------------------------------------------------------------------|
+| SUN | MON | TUE | WED | THU | FRI | SAT                                        |
+|--------------------------------------------------------------------------------|
+| [1] | [2] | [3] | [4] | [5] | [6] | [7]                                        |
+|     |     |     |     |     |     |                                          |
+|     |     |     |     |     |     |                                          |
+|     |     |     |     |     |     |                                          |
+|--------------------------------------------------------------------------------|
+| [8] | [9] | [10]| [11]| [12]| [13]| [14]                                       |
+|     |     |     |     |     |     |                                          |
+|     |     |     |     |     |     |                                          |
+|     |     |     |     |     |     |                                          |
+|--------------------------------------------------------------------------------|
+| ... (Each day cell contains):                                                  |
+|     - [Job Title 1] (e.g., "Client A - Install")                               |
+|     - [Job Title 2] (e.g., "Client B - Removal")                               |
+|     - [Job Title 3] (e.g., "Client C - Event")                                 |
+|     - [Status Indicator] (e.g., green for Job, yellow for Quote)               |
+|     - (Clickable to open Job Details)                                          |
+|     - (+) Add New Quote Button (on each day cell or prominent top-right)       |
++--------------------------------------------------------------------------------+
+
+3.3. Wireframe: Job/Quote Detail Form (Modal/Sidebar)
+
+This form will appear as an overlay when adding a new quote or editing an existing job.
+
++--------------------------------------------------------------------------------+
+|                                Job/Quote Details                               |
+|--------------------------------------------------------------------------------|
+| [X] Close Button                                                               |
++--------------------------------------------------------------------------------+
+|                                                                                |
+|  [Tab: General Info] [Tab: Products] [Tab: Staff] [Tab: Vehicles] [Tab: Financial] |
+|                                                                                |
+|--------------------------------------------------------------------------------|
+| **General Information** (Default Tab)                                          |
+|                                                                                |
+| Client Name: [Text Input Field]                                                |
+| Client Phone: [Text Input Field]                                               |
+| Client Email: [Text Input Field]                                               |
+|                                                                                |
+| Install Date: [Date Picker] Time: [Time Picker]                                |
+| Event Date:   [Date Picker] Time: [Time Picker]                                |
+| Removal Date: [Date Picker] Time: [Time Picker]                                |
+|                                                                                |
+| Location: [Text Input Field]                                                   |
+| Notes: [Text Area]                                                             |
+|                                                                                |
+| Job Status: [Dropdown: Quote, Job, Completed, Cancelled]                       |
+|                                                                                |
+|--------------------------------------------------------------------------------|
+| **Products Ordered** (Products Tab)                                            |
+|                                                                                |
+| [Search/Dropdown for Products] [Add Product Button]                            |
+|                                                                                |
+| [Table/List of Selected Products]                                              |
+| +----------------------------------------------------------------------------+ |
+| | Product Name           | Qty | Available | Status        | Remove |       | |
+| |------------------------|-----|-----------|---------------|--------|-------| |
+| | 3x3m Pop-up White      | 50  | 45        | WARNING: Need | [X]    |       | |
+| |                        |     |           | Assembly (5)  |        |       | |
+| | 6m x 6m Structure      | 1   | 1         | OK            | [X]    |       | |
+| +----------------------------------------------------------------------------+ |
+|                                                                                |
+|--------------------------------------------------------------------------------|
+| **Staff Assignment** (Staff Tab)                                               |
+|                                                                                |
+| [Search/Dropdown for Staff] [Assign Staff Button]                              |
+|                                                                                |
+| [List of Assigned Staff]                                                       |
+| - [Staff Name 1] [X]                                                           |
+| - [Staff Name 2] [X]                                                           |
+|                                                                                |
+|--------------------------------------------------------------------------------|
+| **Vehicle Assignment** (Vehicles Tab)                                          |
+|                                                                                |
+| [Search/Dropdown for Vehicles] [Assign Vehicle Button]                         |
+|                                                                                |
+| [List of Assigned Vehicles]                                                    |
+| - [Vehicle Name 1] [X]                                                         |
+| - [Vehicle Name 2] [X]                                                         |
+|                                                                                |
+|--------------------------------------------------------------------------------|
+| **Financial Status** (Financial Tab)                                           |
+|                                                                                |
+| Operational Details Emailed: [Checkbox]                                        |
+| Client Invoiced: [Checkbox]                                                    |
+| Client Paid: [Checkbox]                                                        |
+|                                                                                |
++--------------------------------------------------------------------------------+
+| [Cancel Button]                                [Save Job/Quote Button]         |
++--------------------------------------------------------------------------------+ 

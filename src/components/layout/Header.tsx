@@ -22,10 +22,9 @@ export default function Header({ user, onLogout, onThemeToggle, isDarkMode = fal
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Jobs', href: '/jobs' },
+    { name: 'Schedule', href: '/schedule' },
     { name: 'Stock', href: '/stock' },
-    { name: 'Staff', href: '/staff' },
-    { name: 'Vehicles', href: '/vehicles' },
+    { name: 'Admin', href: '/admin' },
   ];
 
   const handleLogout = () => {
@@ -35,10 +34,10 @@ export default function Header({ user, onLogout, onThemeToggle, isDarkMode = fal
   };
 
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo and Brand */}
+          {/* Logo and Brand - Left side */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -50,7 +49,7 @@ export default function Header({ user, onLogout, onThemeToggle, isDarkMode = fal
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Center */}
           <nav className="hidden md:flex space-x-8">
             {navigation.map((item) => (
               <Link

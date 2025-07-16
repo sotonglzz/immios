@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Version from '@/components/ui/Version';
 
 interface HeaderProps {
   user?: {
@@ -43,9 +44,12 @@ export default function Header({ user, onLogout, onThemeToggle, isDarkMode = fal
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">I</span>
               </div>
-              <span className="text-xl font-bold text-gray-900 dark:text-white">
-                IMMIOS
-              </span>
+              <div className="flex items-center space-x-2">
+                <span className="text-xl font-bold text-gray-900 dark:text-white">
+                  IMMIOS
+                </span>
+                <Version />
+              </div>
             </Link>
           </div>
 

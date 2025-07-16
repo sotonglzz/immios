@@ -5,6 +5,10 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import Button from '@/components/ui/Button';
 import { StockService, StockProduct, StockComponent, AssemblyAlert } from '@/services/stockService';
 
+// Force dynamic rendering to prevent static generation issues with Firebase
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export default function StockManagementPage() {
   const [activeTab, setActiveTab] = useState('products');
 

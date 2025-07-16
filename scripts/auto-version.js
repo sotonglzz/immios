@@ -113,6 +113,14 @@ function main() {
     // Update HISTORY.md
     updateHistory(newVersion, commitMessage, changedFiles, bumpType);
     
+    // Update version in environment
+    try {
+      const { updateVersionEnv } = require('./update-version-env.js');
+      updateVersionEnv();
+    } catch (error) {
+      console.log('Warning: Could not update version environment:', error.message);
+    }
+    
   } catch (error) {
     console.error('Error in auto-versioning:', error);
     process.exit(1);

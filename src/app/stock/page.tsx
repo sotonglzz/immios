@@ -301,11 +301,11 @@ export default function StockManagementPage() {
           return;
         }
 
-        // Convert linked components to component names array and create quantities mapping
-        const componentNames = linkedComponents.map(lc => lc.componentName);
-        const componentQuantities: { [componentName: string]: number } = {};
+        // Convert linked components to component unique IDs array and create quantities mapping
+        const componentUniqueIds = linkedComponents.map(lc => lc.componentId);
+        const componentQuantities: { [componentUniqueId: string]: number } = {};
         linkedComponents.forEach(lc => {
-          componentQuantities[lc.componentName] = lc.quantity;
+          componentQuantities[lc.componentId] = lc.quantity;
         });
 
         const productData = {
@@ -314,7 +314,7 @@ export default function StockManagementPage() {
           description: newItemData.description.trim(),
           currentStock: newItemData.currentStock,
           minStockLevel: newItemData.minStockLevel,
-          components: componentNames,
+          components: componentUniqueIds,
           componentQuantities: componentQuantities,
           status: StockService.calculateStockStatus(newItemData.currentStock, newItemData.minStockLevel),
           price: 0,
@@ -405,12 +405,12 @@ export default function StockManagementPage() {
     // Initialize editing components for products
     if (type === 'product') {
       const product = item as StockProduct;
-      const initialComponents = product.components.map(componentName => {
-        const component = components.find(c => c.name === componentName);
+      const initialComponents = product.components.map(componentUniqueId => {
+        const component = components.find(c => c.uniqueId === componentUniqueId);
         return {
-          componentId: component?.id || '',
-          componentName: componentName,
-          quantity: product.componentQuantities?.[componentName] || 1
+          componentId: component?.uniqueId || '',
+          componentName: component?.name || '',
+          quantity: product.componentQuantities?.[componentUniqueId] || 1
         };
       });
       setEditingComponents(initialComponents);
@@ -445,15 +445,15 @@ export default function StockManagementPage() {
         }
 
         // Update product components if changed
-        const componentNames = editingComponents.map(ec => ec.componentName);
-        const componentQuantities: { [componentName: string]: number } = {};
+        const componentUniqueIds = editingComponents.map(ec => ec.componentId);
+        const componentQuantities: { [componentUniqueId: string]: number } = {};
         editingComponents.forEach(ec => {
-          componentQuantities[ec.componentName] = ec.quantity;
+          componentQuantities[ec.componentId] = ec.quantity;
         });
 
         // Update product with new components
         await StockService.updateProduct(product.id!, {
-          components: componentNames,
+          components: componentUniqueIds,
           componentQuantities: componentQuantities
         });
 
@@ -734,13 +734,13 @@ export default function StockManagementPage() {
 
   const getComponentsForProduct = (product: StockProduct) => {
     return components.filter(component => 
-      product.components.includes(component.name)
+      product.components.includes(component.uniqueId)
     );
   };
 
   const getProductsUsingComponent = (component: StockComponent) => {
     return products.filter(product => 
-      product.components.includes(component.name)
+      product.components.includes(component.uniqueId)
     );
   };
 
@@ -1186,10 +1186,10 @@ export default function StockManagementPage() {
                           {component.condition}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                          {component.currentStock - StockService.calculateAssembledStock(component.name, products)}
+                          {component.currentStock - StockService.calculateAssembledStock(component.uniqueId, products)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                          {StockService.calculateAssembledStock(component.name, products)}
+                          {StockService.calculateAssembledStock(component.uniqueId, products)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                           {component.currentStock}
@@ -1538,25 +1538,25 @@ export default function StockManagementPage() {
                                     {components
                                       .filter(component => 
                                         component.name.toLowerCase().includes(componentSearchTerm.toLowerCase()) &&
-                                        !linkedComponents.some(lc => lc.componentId === component.id)
+                                        !linkedComponents.some(lc => lc.componentId === component.uniqueId)
                                       )
                                       .slice(0, 10)
                                       .map((component) => (
                                         <button
                                           key={component.id}
-                                          onClick={() => addLinkedComponent(component.id || '', component.name)}
+                                          onClick={() => addLinkedComponent(component.uniqueId || '', component.name)}
                                           className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-900 dark:text-white text-sm border-b border-gray-200 dark:border-gray-600 last:border-b-0"
                                         >
                                           <div className="font-medium">{component.name}</div>
                                           <div className="text-gray-500 dark:text-gray-400 text-xs">
-                                            {component.type || 'N/A'} • {component.size || 'N/A'}/{component.color || 'N/A'} • Stock: {component.currentStock}
+                                            {component.type || 'N/A'} • {component.size || 'N/A'}/{component.color || 'N/A'}/{component.condition || 'N/A'} • Stock: {component.currentStock}
                                           </div>
                                         </button>
                                       ))}
-                                    {components.filter(component => 
-                                      component.name.toLowerCase().includes(componentSearchTerm.toLowerCase()) &&
-                                      !linkedComponents.some(lc => lc.componentId === component.id)
-                                    ).length === 0 && (
+                                    {components                                      .filter(component => 
+                                        component.name.toLowerCase().includes(componentSearchTerm.toLowerCase()) &&
+                                        !linkedComponents.some(lc => lc.componentId === component.uniqueId)
+                                      ).length === 0 && (
                                       <div className="px-3 py-2 text-gray-500 dark:text-gray-400 text-sm">
                                         No components found matching "{componentSearchTerm}"
                                       </div>
@@ -2018,14 +2018,14 @@ export default function StockManagementPage() {
                                     )
                                     .slice(0, 10)
                                     .map((component) => (
-                                      <button
-                                        key={component.id}
-                                        onClick={() => addEditingComponent(component.id || '', component.name)}
-                                        className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-900 dark:text-white text-sm border-b border-gray-200 dark:border-gray-600 last:border-b-0"
-                                      >
+                                                                              <button
+                                          key={component.id}
+                                          onClick={() => addEditingComponent(component.uniqueId || '', component.name)}
+                                          className="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-900 dark:text-white text-sm border-b border-gray-200 dark:border-gray-600 last:border-b-0"
+                                        >
                                         <div className="font-medium">{component.name}</div>
                                         <div className="text-gray-500 dark:text-gray-400 text-xs">
-                                          {component.type || 'N/A'} • {component.size || 'N/A'}/{component.color || 'N/A'} • Stock: {component.currentStock}
+                                          {component.type || 'N/A'} • {component.size || 'N/A'}/{component.color || 'N/A'}/{component.condition || 'N/A'} • Stock: {component.currentStock}
                                         </div>
                                       </button>
                                     ))}

@@ -34,22 +34,24 @@ export interface Staff {
 
 export interface Component {
   id: string;
+  uniqueId: string; // New unique identifier
   name: string;
   description?: string;
   category: string;
   stockLevel: number;
   minStockLevel: number;
-  usedInProducts: string[]; // Product IDs
+  usedInProducts: string[]; // Product unique IDs
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface Product {
   id: string;
+  uniqueId: string; // New unique identifier
   name: string;
   description?: string;
   category: string;
-  components: string[]; // Component IDs
+  components: string[]; // Component unique IDs
   stockLevel: number;
   minStockLevel: number;
   createdAt: Date;

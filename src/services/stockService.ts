@@ -16,16 +16,22 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
+// Utility function to generate unique IDs
+function generateUniqueId(): string {
+  return 'uid_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
 // Types for stock management
 export interface StockProduct {
   id?: string;
+  uniqueId: string; // New unique identifier
   name: string;
   category: string;
   description?: string;
   currentStock: number;
   minStockLevel: number;
-  components: string[];
-  componentQuantities?: { [componentName: string]: number };
+  components: string[]; // Component unique IDs
+  componentQuantities?: { [componentUniqueId: string]: number }; // Quantities by component unique ID
   status: string;
   price?: number;
   rentalPrice?: number;
@@ -35,6 +41,7 @@ export interface StockProduct {
 
 export interface StockComponent {
   id?: string;
+  uniqueId: string; // New unique identifier
   name: string;
   type: string;
   size: string;
@@ -42,7 +49,7 @@ export interface StockComponent {
   condition: string;
   currentStock: number;
   minStockLevel: number;
-  usedInProducts: string[];
+  usedInProducts: string[]; // Product unique IDs
   description?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -102,21 +109,25 @@ export class StockService {
     }
   }
 
-  static async createProduct(productData: Omit<StockProduct, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  static async createProduct(productData: Omit<StockProduct, 'id' | 'uniqueId' | 'createdAt' | 'updatedAt'>): Promise<string> {
     try {
       const batch = writeBatch(db);
+      
+      // Generate unique ID for the product
+      const uniqueId = generateUniqueId();
       
       // Create the product
       const productRef = doc(collection(db, 'products'));
       batch.set(productRef, {
         ...productData,
+        uniqueId,
         createdAt: new Date(),
         updatedAt: new Date()
       });
 
       // Update component references if components are specified
       if (productData.components && productData.components.length > 0) {
-        await this.updateComponentReferencesInBatch(batch, productRef.id, productData.components, 'add');
+        await this.updateComponentReferencesInBatch(batch, uniqueId, productData.components, 'add');
       }
 
       await batch.commit();
@@ -152,13 +163,13 @@ export class StockService {
         // Find components to remove
         const componentsToRemove = oldComponents.filter(comp => !newComponents.includes(comp));
         if (componentsToRemove.length > 0) {
-          await this.updateComponentReferencesInBatch(batch, productId, componentsToRemove, 'remove');
+          await this.updateComponentReferencesInBatch(batch, currentProduct.uniqueId, componentsToRemove, 'remove');
         }
 
         // Find components to add
         const componentsToAdd = newComponents.filter(comp => !oldComponents.includes(comp));
         if (componentsToAdd.length > 0) {
-          await this.updateComponentReferencesInBatch(batch, productId, componentsToAdd, 'add');
+          await this.updateComponentReferencesInBatch(batch, currentProduct.uniqueId, componentsToAdd, 'add');
         }
       }
 
@@ -188,7 +199,7 @@ export class StockService {
         const batch = writeBatch(db);
         
         // Remove component references
-        await this.updateComponentReferencesInBatch(batch, productId, product.components, 'remove');
+        await this.updateComponentReferencesInBatch(batch, product.uniqueId, product.components, 'remove');
         
         // Delete the product
         batch.delete(docRef);
@@ -235,10 +246,14 @@ export class StockService {
     }
   }
 
-  static async createComponent(componentData: Omit<StockComponent, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  static async createComponent(componentData: Omit<StockComponent, 'id' | 'uniqueId' | 'createdAt' | 'updatedAt'>): Promise<string> {
     try {
+      // Generate unique ID for the component
+      const uniqueId = generateUniqueId();
+      
       const docRef = await addDoc(collection(db, 'components'), {
         ...componentData,
+        uniqueId,
         createdAt: new Date(),
         updatedAt: new Date()
       });
@@ -306,11 +321,13 @@ export class StockService {
         ...product,
         name: newName,
         currentStock: 0, // Reset stock for duplicate
-        status: this.calculateStockStatus(0, product.minStockLevel)
+        status: this.calculateStockStatus(0, product.minStockLevel),
+        components: [], // Reset components for duplicate (no linked components)
+        componentQuantities: {} // Reset component quantities
       };
 
-      // Remove id, createdAt, and updatedAt for new document
-      const { id, createdAt, updatedAt, ...productData } = duplicatedProduct;
+      // Remove id, uniqueId, createdAt, and updatedAt for new document
+      const { id, uniqueId, createdAt, updatedAt, ...productData } = duplicatedProduct;
       
       return await this.createProduct(productData);
     } catch (error) {
@@ -344,8 +361,8 @@ export class StockService {
         usedInProducts: [] // Reset product associations for duplicate
       };
 
-      // Remove id, createdAt, and updatedAt for new document
-      const { id, createdAt, updatedAt, ...componentData } = duplicatedComponent;
+      // Remove id, uniqueId, createdAt, and updatedAt for new document
+      const { id, uniqueId, createdAt, updatedAt, ...componentData } = duplicatedComponent;
       
       return await this.createComponent(componentData);
     } catch (error) {
@@ -571,9 +588,9 @@ export class StockService {
       const components = await this.getAllComponents();
       
       // Check for orphaned references
-      const allComponentNames = components.map(c => c.name);
+      const allComponentUniqueIds = components.map(c => c.uniqueId);
       const orphanedProducts = products.filter(p => 
-        p.components?.some(componentName => !allComponentNames.includes(componentName))
+        p.components?.some(componentUniqueId => !allComponentUniqueIds.includes(componentUniqueId))
       );
       
       if (orphanedProducts.length > 0) {
@@ -591,28 +608,28 @@ export class StockService {
 
   // Helper method to update component references
   static async updateComponentReferences(
-    productId: string, 
-    componentNames: string[], 
+    productUniqueId: string, 
+    componentUniqueIds: string[], 
     action: 'add' | 'remove'
   ): Promise<void> {
     try {
       const batch = writeBatch(db);
       
-      // Get all components to find the ones that match the names
+      // Get all components to find the ones that match the unique IDs
       const allComponents = await this.getAllComponents();
       
-      for (const componentName of componentNames) {
-        const component = allComponents.find(c => c.name === componentName);
+      for (const componentUniqueId of componentUniqueIds) {
+        const component = allComponents.find(c => c.uniqueId === componentUniqueId);
         if (component) {
           const componentRef = doc(db, 'components', component.id!);
           let updatedUsedInProducts = [...(component.usedInProducts || [])];
           
           if (action === 'add') {
-            if (!updatedUsedInProducts.includes(productId)) {
-              updatedUsedInProducts.push(productId);
+            if (!updatedUsedInProducts.includes(productUniqueId)) {
+              updatedUsedInProducts.push(productUniqueId);
             }
           } else if (action === 'remove') {
-            updatedUsedInProducts = updatedUsedInProducts.filter(id => id !== productId);
+            updatedUsedInProducts = updatedUsedInProducts.filter(id => id !== productUniqueId);
           }
           
           batch.update(componentRef, {
@@ -632,26 +649,26 @@ export class StockService {
   // Helper method to update component references within an existing batch
   static async updateComponentReferencesInBatch(
     batch: any,
-    productId: string, 
-    componentNames: string[], 
+    productUniqueId: string, 
+    componentUniqueIds: string[], 
     action: 'add' | 'remove'
   ): Promise<void> {
     try {
-      // Get all components to find the ones that match the names
+      // Get all components to find the ones that match the unique IDs
       const allComponents = await this.getAllComponents();
       
-      for (const componentName of componentNames) {
-        const component = allComponents.find(c => c.name === componentName);
+      for (const componentUniqueId of componentUniqueIds) {
+        const component = allComponents.find(c => c.uniqueId === componentUniqueId);
         if (component) {
           const componentRef = doc(db, 'components', component.id!);
           let updatedUsedInProducts = [...(component.usedInProducts || [])];
           
           if (action === 'add') {
-            if (!updatedUsedInProducts.includes(productId)) {
-              updatedUsedInProducts.push(productId);
+            if (!updatedUsedInProducts.includes(productUniqueId)) {
+              updatedUsedInProducts.push(productUniqueId);
             }
           } else if (action === 'remove') {
-            updatedUsedInProducts = updatedUsedInProducts.filter(id => id !== productId);
+            updatedUsedInProducts = updatedUsedInProducts.filter(id => id !== productUniqueId);
           }
           
           batch.update(componentRef, {
@@ -667,13 +684,13 @@ export class StockService {
   }
 
   // Calculate assembled stock for a component
-  static calculateAssembledStock(componentName: string, products: StockProduct[]): number {
+  static calculateAssembledStock(componentUniqueId: string, products: StockProduct[]): number {
     let totalAssembled = 0;
     
     for (const product of products) {
-      if (product.components && product.components.includes(componentName)) {
+      if (product.components && product.components.includes(componentUniqueId)) {
         // Get the quantity of this component used in this product
-        const componentQuantity = product.componentQuantities?.[componentName] || 1;
+        const componentQuantity = product.componentQuantities?.[componentUniqueId] || 1;
         // Multiply by the current stock of the product
         totalAssembled += componentQuantity * product.currentStock;
       }

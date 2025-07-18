@@ -86,6 +86,7 @@ IMMIOS/
 - **HISTORY.md**: Complete version history with detailed work information
 - **Documentation/**: Original PDF documentation files and design specifications
   - **Sitemap and Wireframes**: Comprehensive UI/UX design documentation with navigation structure and wireframe layouts
+  - **PRODUCT_CATALOG.md**: Complete product catalog with specifications, business logic, and job creation requirements
 
 ## Development Phases
 

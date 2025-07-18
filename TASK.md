@@ -62,6 +62,14 @@
   - [ ] Quote vs Job status management
   - [ ] Smart booking suggestions
   - [ ] Job details and notes
+  - [ ] **Product Catalog Integration** - Future Implementation
+    - [ ] Implement Instant marquee configuration logic
+    - [ ] Add Structure marquee component-based sizing
+    - [ ] Create intelligent size calculation algorithms
+    - [ ] Implement assembly task creation system
+    - [ ] Add condition-based stock allocation
+    - [ ] Create weighting and anchoring accessory management
+    - [ ] Implement real-time stock checking for job creation
 
 - [x] **Stock Management UI** - Completed: 2025-01-11
   - [x] Product catalog management interface
@@ -172,6 +180,14 @@
   - Status: [In Progress/Completed/Blocked]
 
 ### Business Requirements Discoveries
+- [x] **Product Catalog Requirements** - Completed: 2025-01-11
+  - [x] Documented complete product catalog with 4 major categories (Instant, Structure, Furniture, Umbrella)
+  - [x] Defined all product specifications, sizes, and variations
+  - [x] Created weighting and anchoring accessory specifications
+  - [x] Documented job creation business logic for intelligent size calculation
+  - [x] Defined assembly task creation and stock allocation logic
+  - [x] Created comprehensive PRODUCT_CATALOG.md documentation
+  - Status: Completed - Ready for future implementation
 - [ ] **Requirement discovered**: [Description of discovered requirement]
   - [ ] Implementation task 1
   - [ ] Implementation task 2
